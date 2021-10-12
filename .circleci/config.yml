@@ -3,6 +3,21 @@ version: 2.1
 orbs:
   aws-ecr: circleci/aws-ecr@7.2.0
 
+jobs:
+  deploy_on_lambda:
+    docker:
+      - image: cimg/base:stable
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+    steps:
+      - checkout
+      - run:
+          name: "aws lambda update-function-code"
+          command: |
+            aws lambda update-function-code --region $AWS_REGION --function-name cci-hello-serverless ¥
+              --image-url $AWS_ECR_ACCOUNT_URL/cci_hello_serverless:latest
+
 workflows:
   build_and_push_image_on_aws:
     jobs:
@@ -11,8 +26,5 @@ workflows:
           create-repo: true
           path: ./aws
           repo: cci_hello_serverless
-      - run:
-          command: |
-            aws lambda update-function-code --region $AWS_REGION --function-name cci-hello-serverless ¥
-              --image-url $AWS_ECR_ACCOUNT_URL/cci_hello_serverless:latest
-
+      - deploy_on_lambda:
+          context: aws, docker

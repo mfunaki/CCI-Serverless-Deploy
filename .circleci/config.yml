@@ -11,4 +11,7 @@ workflows:
           create-repo: true
           path: ./aws
           repo: cci_hello_serverless
+      - run: |
+          aws lambda update-function-code --region $AWS_REGION --function-name cci-hello-serverless ¥
+            --image-url $AWS_ECR_ACCOUNT_URL/cci_hello_serverless:latest
 

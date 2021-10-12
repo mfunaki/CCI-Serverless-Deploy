@@ -1,0 +1,14 @@
+version: 2.1
+
+orbs:
+  aws-ecr: circleci/aws-ecr@7.2.0
+
+workflows:
+  build_and_push_image_on_aws:
+    jobs:
+      - aws-ecr/build-and-push-image:
+          context: aws
+          create-repo: true
+          path: ./aws
+          repo: cci_hello_serverless
+

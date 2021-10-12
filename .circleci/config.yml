@@ -21,13 +21,31 @@ jobs:
             aws lambda update-function-code --region $AWS_REGION \
               --function-name cci-hello-serverless \
               --image-uri $AWS_ECR_ACCOUNT_URL/cci_hello_serverless:latest
+  build_and_push_image_on_docker:
+    docker:
+      - image: cibuilds/docker:latest
+        auth:
+          username: $DOCKER_HUB_USERNAME
+          password: $DOCKER_HUB_ACCESSTOKEN
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: "Build a Docker image"
+          command: |
+            cd azure
+            docker build -t mfunaki/cci-hello-serverless-azure .
+      - run:
+          name "Push to DockerHub"
+          command: |
+            echo "$DOCKER_HUB_ACCESSTOKEN" | docker login --username $DOCKER_HUB_USERNAME --password-stdin && \
+            docker push mfunaki/cci-hello-serverless-azure
 
 workflows:
-  build_and_push_image_on_aws:
+  build_push_and_deploy_on_aws:
     jobs:
       - aws-ecr/build-and-push-image:
-          context:
-            - aws
+          context: aws
           create-repo: true
           path: ./aws
           repo: cci_hello_serverless
@@ -37,3 +55,7 @@ workflows:
             - docker
           requires:
             - aws-ecr/build-and-push-image
+  build_push_and_deploy_on_azure:
+    jobs:
+      - build_and_push_image_on_docker:
+          context: docker

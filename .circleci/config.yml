@@ -28,3 +28,4 @@ workflows:
           repo: cci_hello_serverless
       - deploy_on_lambda:
           context: aws, docker
+          requires: aws-ecr/build-and-push-image

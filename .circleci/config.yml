@@ -22,11 +22,15 @@ workflows:
   build_and_push_image_on_aws:
     jobs:
       - aws-ecr/build-and-push-image:
-          context: aws, docker
+          context:
+            - aws
+            - docker
           create-repo: true
           path: ./aws
           repo: cci_hello_serverless
       - deploy_on_lambda:
-          context: aws, docker
+          context:
+            - aws
+            - docker
           requires:
             - aws-ecr/build-and-push-image

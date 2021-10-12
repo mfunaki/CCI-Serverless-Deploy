@@ -36,7 +36,7 @@ jobs:
             cd azure
             docker build -t mfunaki/cci-hello-serverless-azure .
       - run:
-          name "Push to DockerHub"
+          name: "Push to DockerHub"
           command: |
             echo "$DOCKER_HUB_ACCESSTOKEN" | docker login --username $DOCKER_HUB_USERNAME --password-stdin && \
             docker push mfunaki/cci-hello-serverless-azure

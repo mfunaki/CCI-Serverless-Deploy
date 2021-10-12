@@ -1,6 +1,7 @@
 version: 2.1
 
 orbs:
+  aws-cli: circleci/aws-cli@2.0.3
   aws-ecr: circleci/aws-ecr@7.2.0
 
 jobs:
@@ -12,6 +13,8 @@ jobs:
           password: $DOCKERHUB_PASSWORD
     steps:
       - checkout
+      - aws-cli/setup
+          aws-region: $AWS_REGION
       - run:
           name: "aws lambda update-function-code"
           command: |

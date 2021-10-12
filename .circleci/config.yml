@@ -24,7 +24,6 @@ workflows:
       - aws-ecr/build-and-push-image:
           context:
             - aws
-            - docker
           create-repo: true
           path: ./aws
           repo: cci_hello_serverless

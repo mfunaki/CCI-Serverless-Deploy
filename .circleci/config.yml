@@ -15,7 +15,7 @@ jobs:
       - run:
           name: "aws lambda update-function-code"
           command: |
-            aws lambda update-function-code --region $AWS_REGION --function-name cci-hello-serverless ¥
+            aws lambda update-function-code --region $AWS_REGION --function-name cci-hello-serverless \
               --image-url $AWS_ECR_ACCOUNT_URL/cci_hello_serverless:latest
 
 workflows:

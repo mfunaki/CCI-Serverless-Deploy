@@ -13,8 +13,8 @@ jobs:
           password: $DOCKERHUB_PASSWORD
     steps:
       - checkout
-      - aws-cli/setup
-          aws-region: $AWS_REGION
+      - aws-cli/setup:
+          aws-region: AWS_REGION
       - run:
           name: "aws lambda update-function-code"
           command: |
